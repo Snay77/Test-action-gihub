@@ -1,0 +1,14 @@
+name: Commit Message
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  check-commit-message:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Display commit message
+        run: echo "Commit message: ${{ github.event.head_commit.message }}"
