@@ -17,7 +17,7 @@ jobs:
           run: echo "Ceci est un artefact généré" > artefact.txt
 
         - name: Sauvegarder le fichier en tant qu'artefact
-          uses: actions/upload-artifact@v3
+          uses: actions/upload-artifact@v4
           with:
             name: fichier-genere
             path: artefact.txt
@@ -27,7 +27,7 @@ jobs:
         needs: generate-files
         steps:
           - name: Télécharger l'artefact
-            uses: actions/download-artifact@v3
+            uses: actions/download-artifact@v4
             with:
               name: fichier-genere
               path: ./artefacts
