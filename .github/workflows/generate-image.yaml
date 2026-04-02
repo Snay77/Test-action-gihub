@@ -50,6 +50,13 @@ jobs:
           done
           echo "</body></html>" >> index.html
 
+      - name: Debug images
+        run: |
+          echo "Liste des fichiers :"
+          ls -l
+          echo "Contenu images :"
+          ls -l images || echo "Le dossier images n'existe pas"
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
