@@ -26,7 +26,7 @@ jobs:
           RESPONSE=$(curl -X POST https://api.dynapictures.com/designs/c1a1963ea3 \
             -H "Authorization: Bearer 7cbad4594a73099c048bb1a54de6f4ec88e16052eee2246d" \
             -H "Content-Type: application/json" \
-            -d '{"params":[{"format":"jpeg","metadata":"some text","params":[{"name":"text1","text":"${{ env.MESSAGE }}"},{"name":"text2","text":"Additional text"}]}]}')
+            -d '{"params":[{"format":"jpeg","metadata":"some text","params":[{"name":"text1","text":"${{ env.MESSAGE }}"}]}]}')
 
           echo "Réponse API :"
           echo "$RESPONSE"
