@@ -44,25 +44,24 @@ jobs:
       - name: Generate index.html
         run: |
           echo "<html><body><h1>Generated Images test</h1>" > index.html
-          for img in images/*
-          do
-            echo "<div><img src='$img' width='300'><p>$img</p></div>" >> index.html
-          done
-          echo "</body></html>" >> index.html
 
-      - name: Generate index.html
-        run: |
-          echo "<html><body><h1>Generated Images test</h1>" > index.html
-
+          COUNT=0
           for img in images/*.png; do
-            echo "Image trouvée: $img"
+            COUNT=$((COUNT + 1))
+            echo "Tour numéro $COUNT sur $img"
             echo "<div><img src='$img' width='300'><p>$img</p></div>" >> index.html
           done
 
           echo "</body></html>" >> index.html
-
-          echo "Contenu index.html :"
+          echo "Nombre d'images traitées : $COUNT"
           cat index.html
+
+      - name: Debug images
+        run: |
+          echo "Liste des fichiers :"
+          ls -l
+          echo "Contenu images :"
+          ls -l images || echo "Le dossier images n'existe pas"
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
