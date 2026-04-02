@@ -23,7 +23,8 @@ jobs:
         run: |
           mkdir -p images
 
-          RESPONSE=$(curl -X POST https://api.dynapictures.com/designs/c1a1963ea3 \
+          RESPONSE=$(curl -d '{"params":[  {"format": "jpeg","metadata": "some text","params": [{"name": "text1","text": "Test de l'image"}]}' \
+            -X POST https://api.dynapictures.com/designs/c1a1963ea3 \
             -H "Authorization: Bearer 7cbad4594a73099c048bb1a54de6f4ec88e16052eee2246d" \
             -H "Content-Type: application/json" \
             -d "$JSON")
