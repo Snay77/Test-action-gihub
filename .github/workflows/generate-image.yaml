@@ -44,7 +44,8 @@ jobs:
       - name: Generate index.html
         run: |
           echo "<html><body><h1>Generated Images test</h1>" > index.html
-          for img in images/*.png; do
+          for img in images/*
+          do
             echo "<div><img src='$img' width='300'><p>$img</p></div>" >> index.html
           done
           echo "</body></html>" >> index.html
