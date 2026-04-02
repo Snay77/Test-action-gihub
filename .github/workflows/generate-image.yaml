@@ -50,12 +50,19 @@ jobs:
           done
           echo "</body></html>" >> index.html
 
-      - name: Debug images
+      - name: Generate index.html
         run: |
-          echo "Liste des fichiers :"
-          ls -l
-          echo "Contenu images :"
-          ls -l images || echo "Le dossier images n'existe pas"
+          echo "<html><body><h1>Generated Images test</h1>" > index.html
+
+          for img in images/*.png; do
+            echo "Image trouvée: $img"
+            echo "<div><img src='$img' width='300'><p>$img</p></div>" >> index.html
+          done
+
+          echo "</body></html>" >> index.html
+
+          echo "Contenu index.html :"
+          cat index.html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
