@@ -26,9 +26,18 @@ jobs:
           RESPONSE=$(curl -X POST https://api.dynapictures.com/designs/c1a1963ea3 \
             -H "Authorization: Bearer 7cbad4594a73099c048bb1a54de6f4ec88e16052eee2246d" \
             -H "Content-Type: application/json" \
-            -d "{\"text\": \"${MESSAGE}\"}")
+            -d "$JSON")
+
+          echo "Réponse API :"
+          echo "$RESPONSE"
 
           IMAGE_URL=$(echo $RESPONSE | jq -r '.image_url')
+          echo "IMAGE_URL=$IMAGE_URL"
+
+          if [ "$IMAGE_URL" = "null" ] || [ -z "$IMAGE_URL" ]; then
+            echo "Erreur : aucune image_url retournée par l'API"
+            exit 1
+          fi
 
           curl -o images/image-$(date +%s).png $IMAGE_URL
 
