@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Get commit message
         id: commit
@@ -39,9 +39,3 @@ jobs:
             echo "<div><img src='$img' width='300'><p>$img</p></div>" >> index.html
           done
           echo "</body></html>" >> index.html
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .
