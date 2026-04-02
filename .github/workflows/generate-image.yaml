@@ -1,0 +1,47 @@
+name: Generate Image from Commit
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  generate-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Get commit message
+        id: commit
+        run: |
+          echo "MESSAGE=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
+
+      - name: Generate image via DynaPictures
+        run: |
+          mkdir -p images
+
+          RESPONSE=$(curl -X POST https://api.dynapictures.com/designs/c1a1963ea3 \
+            -H "Authorization: Bearer 7cbad4594a73099c048bb1a54de6f4ec88e16052eee2246d \
+            -H "Content-Type: application/json" \
+            -d "{\"text\": \"${MESSAGE}\"}")
+
+          IMAGE_URL=$(echo $RESPONSE | jq -r '.image_url')
+
+          curl -o images/image-$(date +%s).png $IMAGE_URL
+
+      - name: Generate index.html
+        run: |
+          echo "<html><body><h1>Generated Images</h1>" > index.html
+          for img in images/*.png; do
+            echo "<div><img src='$img' width='300'><p>$img</p></div>" >> index.html
+          done
+          echo "</body></html>" >> index.html
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
