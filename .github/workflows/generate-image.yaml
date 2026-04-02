@@ -31,7 +31,7 @@ jobs:
           echo "Réponse API :"
           echo "$RESPONSE"
 
-          IMAGE_URL=$(echo $RESPONSE | jq -r '.image_url')
+          IMAGE_URL=$(echo "$RESPONSE" | jq -r '.imageUrl')
           echo "IMAGE_URL=$IMAGE_URL"
 
           if [ "$IMAGE_URL" = "null" ] || [ -z "$IMAGE_URL" ]; then
