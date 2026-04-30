@@ -15,7 +15,6 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Get commit message
-        id: commit
         run: |
           echo "MESSAGE=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
 
@@ -23,10 +22,19 @@ jobs:
         run: |
           mkdir -p images
 
-          RESPONSE=$(curl -X POST https://api.dynapictures.com/designs/c1a1963ea3 \
-            -H "Authorization: Bearer 7cbad4594a73099c048bb1a54de6f4ec88e16052eee2246d" \
+          RESPONSE=$(curl -X POST https://api.dynapictures.com/designs/${{ secrets.DYNAPICTURES_TEMPLATE_ID }} \
+            -H "Authorization: Bearer ${{ secrets.DYNAPICTURES_API_KEY }}" \
             -H "Content-Type: application/json" \
-            -d '{"format": "jpeg","metadata": "some text","params": [{"name": "text1","text": "${{ env.MESSAGE }}"}]}')
+            -d '{
+              "format": "jpeg",
+              "metadata": "some text",
+              "params": [
+                {
+                  "name": "text1",
+                  "text": "'"${{ env.MESSAGE }}"'"
+                }
+              ]
+            }')
 
           echo "Réponse API :"
           echo "$RESPONSE"
@@ -39,22 +47,25 @@ jobs:
             exit 1
           fi
 
-          curl -o images/image-$(date +%s).png $IMAGE_URL
+          FILE_NAME="image-$(date +%s).png"
+          curl -o images/$FILE_NAME $IMAGE_URL
+
+          echo "IMAGE_NAME=$FILE_NAME" >> $GITHUB_ENV
+
+      - name: Upload generated image as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: image-generee
+          path: images/${{ env.IMAGE_NAME }}
 
       - name: Generate index.html
         run: |
           echo "<html><body><h1>Generated Images test</h1>" > index.html
-
-          COUNT=0
-          for img in images/*.png; do
-            COUNT=$((COUNT + 1))
-            echo "Tour numéro $COUNT sur $img"
+          for img in images/*
+          do
             echo "<div><img src='$img' width='300'><p>$img</p></div>" >> index.html
           done
-
           echo "</body></html>" >> index.html
-          echo "Nombre d'images traitées : $COUNT"
-          cat index.html
 
       - name: Debug images
         run: |
