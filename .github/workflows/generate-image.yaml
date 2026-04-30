@@ -28,7 +28,7 @@ jobs:
             -d '{
                 "format": "jpeg",
                 "metadata": "some text",
-                "params": [
+                "params": [ 
                   {
                     "name": "text1",
                     "text": "Message de commit :"
