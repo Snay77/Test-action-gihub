@@ -26,15 +26,20 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.DYNAPICTURES_API_KEY }}" \
             -H "Content-Type: application/json" \
             -d '{
-              "format": "jpeg",
-              "metadata": "some text",
-              "params": [
-                {
-                  "name": "text1",
-                  "text": "'"${{ env.MESSAGE }}"'"
-                }
-              ]
-            }')
+                "format": "jpeg",
+                "metadata": "some text",
+                "params": [
+                  {
+                    "name": "text1",
+                    "text": "Message de commit :"
+                  },
+                  {
+                    "name": "text2",
+                    "text": "'"${{ env.MESSAGE }}"'"
+                  }
+                ]
+              }'
+            )
 
           echo "Réponse API :"
           echo "$RESPONSE"
