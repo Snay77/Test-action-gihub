@@ -34,6 +34,6 @@ jobs:
           curl -H "Content-Type: application/json" \
             -X POST \
             -d "{
-              \"content\": \"📝 Nouveau commit : ${{ env.MESSAGE }}\n📷 Image générée : ${{ env.IMAGE_URL }}\"
+              \"content\": \"📝 Nouveau commit: ${{ env.MESSAGE }}\n📷 Image générée : ${{ env.IMAGE_URL }}\"
             }" \
             ${{ secrets.DISCORD_WEBHOOK_URL }}
