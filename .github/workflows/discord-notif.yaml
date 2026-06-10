@@ -11,25 +11,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout main repo
+      - name: Checkout repo
         uses: actions/checkout@v4
-        with:
-          path: main-repo
 
       - name: Get commit message
         run: |
-          cd main-repo
           echo "MESSAGE=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
 
-      - name: Checkout GitHub Pages branch
-        uses: actions/checkout@v4
-        with:
-          ref: gh-pages
-          path: pages-repo
-
-      - name: Find latest generated image
+      - name: Find generated image
         run: |
-          IMAGE_NAME=$(ls pages-repo/images/image-*.jpg | sort -V | tail -n 1 | xargs basename)
+          IMAGE_NAME=$(ls public/images/image-*.jpg | sort -V | tail -n 1 | xargs basename)
           echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
           echo "Dernière image trouvée : $IMAGE_NAME"
 
