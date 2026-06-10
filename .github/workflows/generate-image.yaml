@@ -6,6 +6,9 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   generate-and-deploy:
     runs-on: ubuntu-latest
@@ -127,10 +130,19 @@ jobs:
           </html>
           EOF
 
-      - name: Debug files
+      - name: Push generated image to main
         run: |
-          echo "Contenu du dossier public :"
-          ls -R public
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add public/images public/index.html
+
+          if git diff --cached --quiet; then
+            echo "Aucun changement à commit"
+          else
+            git commit -m "Add generated image [skip ci]"
+            git push
+          fi
 
       - name: Upload generated image as artifact
         uses: actions/upload-artifact@v4
