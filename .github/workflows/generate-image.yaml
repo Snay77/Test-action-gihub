@@ -34,7 +34,7 @@ jobs:
                 "params": [ 
                   {
                     "name": "text2",
-                    "text": "Message de commit :"
+                    "text": "Message de commit:"
                   },
                   {
                     "name": "text3",
