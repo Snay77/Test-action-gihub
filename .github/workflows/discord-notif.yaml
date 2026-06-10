@@ -1,9 +1,10 @@
 name: Discord Notification Image
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["Generate Image from Commit"]
+    types:
+      - completed
   workflow_dispatch:
 
 jobs:
@@ -18,11 +19,19 @@ jobs:
         run: |
           echo "MESSAGE=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
 
+      - name: Download generated image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: image-generee
+          path: ./artifacts
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ github.event.workflow_run.id }}
+
       - name: Find generated image
         run: |
-          IMAGE_NAME=$(ls public/images/image-*.jpg | sort -V | tail -n 1 | xargs basename)
+          IMAGE_NAME=$(ls ./artifacts | head -n 1)
           echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
-          echo "Dernière image trouvée : $IMAGE_NAME"
+          echo "Image trouvée : $IMAGE_NAME"
 
       - name: Build image URL
         run: |
